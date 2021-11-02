@@ -1,0 +1,128 @@
+#+TITLE: notes_Reactjs
+* Contents :TOC_3:noexport:
+- [[#todo][TODO]]
+- [[#component][Component]]
+
+* TODO
++ [ ] Things to look up
+  - [ ] Difference between ~react~, ~react-dom~ and ~react-native~
+  - [ ] Look into ~create react app~
+* Component
+Lets use the following example html file:
+
+#+begin_src html :noeval
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Adopt Me</title>
+</head>
+<body>
+    <div id="root">Nothing rendered here!</div>
+    <script src="https://unpkg.com/react@17.0.1/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.1/umd/react-dom.development.js"></script>
+
+    <script>
+        const App = () => {
+                    return React.createElement(
+                    "div",
+                    {},
+                    React.createElement("h1", {}, "Adope Me")
+                    );
+                };
+
+        ReactDOM.render(React.createElement(App), document.getElementById('root'));
+    </script>
+</body>
+</html>
+
+#+end_src
+
+Now lets create a React Component:
+
+#+begin_src js :noeval
+// Creating a component ~App~
+// NOTE: We are only creating it here, not using it
+    <script>
+        const App = () => {
+                    return React.createElement(
+                    "div",
+                    {},
+                    React.createElement("h1", {}, "Adope Me")
+                        // NOTE: the ~{}~ are an empty object if theres nothing in it,
+                        // similar to the unit tuple in Rust.
+                        // NOTE: Args in this parameter are the ~attributes~ of the created tag
+                    );
+                };
+    </script>
+#+end_src
+
+The above function returns the result of ~React.createElement()~.
+~App~ is what we call a React Component. We can use ~App~ now
+to create multiple instances of itself.
+
+The basic building block of React is that we use functions and classes to
+create (reusable) Components.
+
+Now lets use the ~App~ component we have just created:
+
+#+begin_src js :noeval
+<script>
+        const App = () => {
+                    return React.createElement(
+                    "div",
+                    {},
+                    React.createElement("h1", {}, "Adope Me")
+                    );
+                };
+
+        // Render out the ~App~ Component with ReactDOM
+        ReactDOM.render(React.createElement(App), document.getElementById('root'));
+</script>
+#+end_src
+
+We ask the ~render()~ from ReactDOM to render ~App~ and we then have to specify
+where we want the Component rendered. The first arg to the ~render()~ passes in
+the Component instance (the instance is why we use ~React.createElement(App)~ even
+though ~App~ returns ~React.createElement()~) and the second arg passes in the ~id~,
+from the current document, of where the component will be rendered.
+
+Now obviously writing out an ~h1~ tag with the string "Adopt Me" in it will be far
+easier and quicker to do in HTML, but the benefit of this approach is now we can
+create compponents beforehand that we can use repetitively on the fly without having
+to create it again. Like the example below:
+
+#+begin_src js :noeval
+const Pet = () => {
+    return React.createElement(
+        "div",
+        {},
+        [
+            React.createElement("h2", {}, "Yuna"),
+            React.createElement("h3", {}, "Dog"),
+            React.createElement("h3", {}, "Pariah"),
+        ]
+    );
+};
+
+const App = () => {
+    return React.createElement(
+        "div",
+        {},
+        [
+            React.createElement("h1", {}, "Adope Me"),
+            React.createElement(Pet),
+            React.createElement(Pet),
+            React.createElement(Pet),
+        ]
+    );
+};
+
+ReactDOM.render(React.createElement(App), document.getElementById('root'));
+#+end_src
+
+We created another Component ~Pet~ and used 3 instances of it in ~App~. We did this
+by passing in an array of ~react.element~ objects into ~React.createElement()~.
